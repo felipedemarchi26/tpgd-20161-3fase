@@ -34,5 +34,9 @@ private:
 	void Move(float Value);
 
 	void MoveSides(float Value);
+
+	void OnCrouch();
+
+	void OnUncrouch();
 	
 };

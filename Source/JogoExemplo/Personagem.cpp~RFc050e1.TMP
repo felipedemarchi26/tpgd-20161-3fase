@@ -19,7 +19,6 @@ APersonagem::APersonagem()
 	Camera->SetupAttachment(CameraBoom);
 
 	GetCharacterMovement()->MaxWalkSpeed = 400.0f;
-	GetCharacterMovement()->GetNavAgentPropertiesRef().bCanCrouch = true;
 }
 
 // Called when the game starts or when spawned
@@ -48,10 +47,6 @@ void APersonagem::SetupPlayerInputComponent(class UInputComponent* InputComponen
 		&ACharacter::Jump);
 	InputComponent->BindAction("Jump", IE_Released, this,
 		&ACharacter::StopJumping);
-	InputComponent->BindAction("Crouch", IE_Pressed, this,
-		&APersonagem::OnCrouch);
-	InputComponent->BindAction("Crouch", IE_Released, this,
-		&APersonagem::OnUncrouch);
 }
 
 //Método que movimenta o personagem para frente e para tras.
@@ -67,9 +62,9 @@ void APersonagem::MoveSides(float Value) {
 }
 
 void APersonagem::OnCrouch() {
-	Super::Crouch();
+	Crouch();
 }
 
 void APersonagem::OnUncrouch() {
-	Super::UnCrouch();
+
 }
