@@ -73,3 +73,11 @@ void APersonagem::OnCrouch() {
 void APersonagem::OnUncrouch() {
 	Super::UnCrouch();
 }
+
+int APersonagem::GetCollected() {
+	return Collected;
+}
+
+void APersonagem::SetCollected(int NewCollected) {
+	Collected = NewCollected;
+}

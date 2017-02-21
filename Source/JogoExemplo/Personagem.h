@@ -23,6 +23,10 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* InputComponent) override;
 
+	int GetCollected();
+
+	void SetCollected(int NewCollected);
+
 private:
 
 	UPROPERTY(EditAnywhere, Category = "Camera")
@@ -31,6 +35,9 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Camera")
 	UCameraComponent* Camera;
 
+	UPROPERTY(EditAnywhere, Category = "Pontuacao")
+	int Collected;
+
 	void Move(float Value);
 
 	void MoveSides(float Value);
@@ -38,5 +45,7 @@ private:
 	void OnCrouch();
 
 	void OnUncrouch();
+
+
 	
 };

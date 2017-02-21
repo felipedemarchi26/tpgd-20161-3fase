@@ -2,6 +2,7 @@
 
 #include "JogoExemplo.h"
 #include "CollectibleActor.h"
+#include "Personagem.h"
 
 
 // Sets default values
@@ -12,10 +13,14 @@ ACollectibleActor::ACollectibleActor()
 
 	CollisionComp = CreateDefaultSubobject<USphereComponent>
 		(TEXT("CollisionComp"));
+	CollisionComp->bGenerateOverlapEvents = true;
+	CollisionComp->SetCollisionProfileName("OverlapAllDynamic");
+	CollisionComp->OnComponentBeginOverlap.AddDynamic(this, &ACollectibleActor::OnOverlapBegin);
 	RootComponent = CollisionComp;
 
 	MeshComp = CreateDefaultSubobject<UStaticMeshComponent>
 		(TEXT("MeshComp"));
+	MeshComp->SetCollisionProfileName("NoCollision");
 	MeshComp->SetupAttachment(RootComponent);
 
 }
@@ -34,3 +39,11 @@ void ACollectibleActor::Tick( float DeltaTime )
 
 }
 
+void ACollectibleActor::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult) {
+	if (OtherActor != nullptr && OtherActor->IsA(APersonagem::StaticClass())) {
+		APersonagem* Personagem = Cast<APersonagem>(OtherActor);
+		Personagem->SetCollected(Personagem->GetCollected() + 1);
+		UE_LOG(LogTemp, Warning, TEXT("Pontuação: %d"), Personagem->GetCollected());
+		Destroy();
+	}
+}
