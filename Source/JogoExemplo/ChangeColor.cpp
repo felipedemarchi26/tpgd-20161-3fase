@@ -2,6 +2,7 @@
 
 #include "JogoExemplo.h"
 #include "ChangeColor.h"
+#include "Personagem.h"
 
 
 // Sets default values
@@ -12,6 +13,12 @@ AChangeColor::AChangeColor()
 
 	CollisionComp = CreateDefaultSubobject<UBoxComponent>
 		(TEXT("CollisionComp"));
+	CollisionComp->bGenerateOverlapEvents = true;
+	CollisionComp->SetCollisionProfileName("OverlapAllDynamic");
+	CollisionComp->OnComponentBeginOverlap.AddDynamic(this,
+		&AChangeColor::OnOverlapBegin);
+	CollisionComp->OnComponentEndOverlap.AddDynamic(this,
+		&AChangeColor::OnOverlapEnd);
 	RootComponent = CollisionComp;
 
 	MeshComp = CreateDefaultSubobject<UStaticMeshComponent>
@@ -47,3 +54,40 @@ void AChangeColor::Tick( float DeltaTime )
 
 }
 
+void AChangeColor::OnOverlapBegin(UPrimitiveComponent* OverlappedComp,
+	AActor* OtherActor, UPrimitiveComponent* OtherComp,
+	int32 OtherBodyIndex, bool bFromSweep,
+	const FHitResult& SweepResult) {
+
+	if (OtherActor != nullptr && 
+		OtherActor->IsA(APersonagem::StaticClass())) {
+
+		UMaterial* Material = Cast<UMaterial>
+			(StaticLoadObject(UMaterial::StaticClass(), NULL, 
+			TEXT("Material'/Game/StarterContent/Materials/M_Metal_Steel.M_Metal_Steel'")));
+		if (Material != nullptr) {
+			MeshComp->SetMaterial(0, Material);
+		}
+
+	}
+
+}
+
+void AChangeColor::OnOverlapEnd(UPrimitiveComponent*
+	OverlappedComp, AActor* OtherActor, 
+	UPrimitiveComponent* OtherComp, int32
+	OtherBodyIndex) {
+
+	if (OtherActor != nullptr && 
+		OtherActor->IsA(APersonagem::StaticClass())) {
+
+		UMaterial* Material = Cast<UMaterial>
+			(StaticLoadObject(UMaterial::StaticClass(), NULL,
+				TEXT("Material'/Game/StarterContent/Materials/M_Brick_Clay_New.M_Brick_Clay_New'")));
+		if (Material != nullptr) {
+			MeshComp->SetMaterial(0, Material);
+		}
+
+	}
+
+}
