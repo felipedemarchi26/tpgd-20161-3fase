@@ -23,6 +23,8 @@ public:
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* InputComponent) override;
 
+	virtual void Jump() override;
+
 	int GetCollected();
 
 	void SetCollected(int NewCollected);
@@ -37,6 +39,9 @@ private:
 
 	UPROPERTY(EditAnywhere, Category = "Pontuacao")
 	int Collected;
+
+	UPROPERTY(EditAnywhere, Category = "Animation")
+	UAnimSequence* JumpAnim;
 
 	void Move(float Value);
 

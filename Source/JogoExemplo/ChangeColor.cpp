@@ -62,11 +62,17 @@ void AChangeColor::OnOverlapBegin(UPrimitiveComponent* OverlappedComp,
 	if (OtherActor != nullptr && 
 		OtherActor->IsA(APersonagem::StaticClass())) {
 
-		UMaterial* Material = Cast<UMaterial>
-			(StaticLoadObject(UMaterial::StaticClass(), NULL, 
-			TEXT("Material'/Game/StarterContent/Materials/M_Metal_Steel.M_Metal_Steel'")));
-		if (Material != nullptr) {
-			MeshComp->SetMaterial(0, Material);
+		APersonagem* Personagem = Cast<APersonagem>(OtherActor);
+
+		if (Personagem->GetCollected() == 5) {
+
+			UMaterial* Material = Cast<UMaterial>
+				(StaticLoadObject(UMaterial::StaticClass(), NULL,
+					TEXT("Material'/Game/StarterContent/Materials/M_Metal_Steel.M_Metal_Steel'")));
+			if (Material != nullptr) {
+				MeshComp->SetMaterial(0, Material);
+			}
+
 		}
 
 	}
@@ -81,11 +87,17 @@ void AChangeColor::OnOverlapEnd(UPrimitiveComponent*
 	if (OtherActor != nullptr && 
 		OtherActor->IsA(APersonagem::StaticClass())) {
 
-		UMaterial* Material = Cast<UMaterial>
-			(StaticLoadObject(UMaterial::StaticClass(), NULL,
-				TEXT("Material'/Game/StarterContent/Materials/M_Brick_Clay_New.M_Brick_Clay_New'")));
-		if (Material != nullptr) {
-			MeshComp->SetMaterial(0, Material);
+		APersonagem* Personagem = Cast<APersonagem>(OtherActor);
+
+		if (Personagem->GetCollected() == 5) {
+
+			UMaterial* Material = Cast<UMaterial>
+				(StaticLoadObject(UMaterial::StaticClass(), NULL,
+					TEXT("Material'/Game/StarterContent/Materials/M_Brick_Clay_New.M_Brick_Clay_New'")));
+			if (Material != nullptr) {
+				MeshComp->SetMaterial(0, Material);
+			}
+
 		}
 
 	}
