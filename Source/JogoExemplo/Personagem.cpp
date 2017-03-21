@@ -2,6 +2,7 @@
 
 #include "JogoExemplo.h"
 #include "Personagem.h"
+#include "ProjectileActor.h"
 
 
 // Sets default values
@@ -33,6 +34,18 @@ APersonagem::APersonagem()
 		JumpLoad(TEXT("AnimSequence'/Game/AnimStarterPack/Jump_From_Stand.Jump_From_Stand'"));
 	if (JumpLoad.Succeeded()) {
 		JumpAnim = JumpLoad.Object;
+	}
+
+	ConstructorHelpers::FObjectFinder<UAnimBlueprint>
+		WalkLoad(TEXT("AnimBlueprint'/Game/Animations/WalkAnimation.WalkAnimation'"));
+	if (WalkLoad.Succeeded()) {
+		WalkAnim = WalkLoad.Object->GetAnimBlueprintGeneratedClass();
+	}
+
+	ConstructorHelpers::FObjectFinder<UAnimBlueprint>
+		CrouchLoad(TEXT("AnimBlueprint'/Game/Animations/CrouchAnimation.CrouchAnimation'"));
+	if (CrouchLoad.Succeeded()) {
+		CrouchAnim = CrouchLoad.Object->GetAnimBlueprintGeneratedClass();
 	}
 
 	AutoPossessPlayer = EAutoReceiveInput::Player0;
@@ -75,6 +88,12 @@ void APersonagem::SetupPlayerInputComponent(class UInputComponent* InputComponen
 		&APersonagem::OnCrouch);
 	InputComponent->BindAction("Crouch", IE_Released, this,
 		&APersonagem::OnUncrouch);
+	InputComponent->BindAction("Run", IE_Pressed, this,
+		&APersonagem::StartRun);
+	InputComponent->BindAction("Run", IE_Released, this,
+		&APersonagem::StopRun);
+	InputComponent->BindAction("Drop", IE_Pressed, this,
+		&APersonagem::DropProjectile);
 }
 
 //Método que movimenta o personagem para frente e para tras.
@@ -91,10 +110,12 @@ void APersonagem::MoveSides(float Value) {
 
 void APersonagem::OnCrouch() {
 	Super::Crouch();
+	GetMesh()->SetAnimInstanceClass(CrouchAnim);
 }
 
 void APersonagem::OnUncrouch() {
 	Super::UnCrouch();
+	GetMesh()->SetAnimInstanceClass(WalkAnim);
 }
 
 int APersonagem::GetCollected() {
@@ -110,5 +131,23 @@ void APersonagem::Jump() {
 
 	if (JumpAnim != nullptr) {
 		GetMesh()->PlayAnimation(JumpAnim, false);
+	}
+}
+
+void APersonagem::StartRun() {
+	GetCharacterMovement()->MaxWalkSpeed = 800.0f;
+}
+
+void APersonagem::StopRun() {
+	GetCharacterMovement()->MaxWalkSpeed = 400.0f;
+}
+
+void APersonagem::DropProjectile() {
+	UWorld* World = GetWorld();
+	if (World) {
+		FActorSpawnParameters SpawnParameters;
+		AProjectileActor* Projectile = 
+			World->SpawnActor<AProjectileActor>(GetActorLocation(),
+			FRotator::ZeroRotator, SpawnParameters);
 	}
 }

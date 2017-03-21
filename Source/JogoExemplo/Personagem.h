@@ -43,6 +43,12 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Animation")
 	UAnimSequence* JumpAnim;
 
+	UPROPERTY(EditAnywhere, Category = "Animation")
+		UAnimBlueprintGeneratedClass* WalkAnim;
+
+	UPROPERTY(EditAnywhere, Category = "Animation")
+		UAnimBlueprintGeneratedClass* CrouchAnim;
+
 	void Move(float Value);
 
 	void MoveSides(float Value);
@@ -51,6 +57,10 @@ private:
 
 	void OnUncrouch();
 
+	void StartRun();
 
+	void StopRun();
+
+	void DropProjectile();
 	
 };
