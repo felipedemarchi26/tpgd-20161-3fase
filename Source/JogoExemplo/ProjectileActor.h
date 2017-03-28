@@ -27,5 +27,8 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	USphereComponent* CollisionComp;
+
+	UPROPERTY(EditAnywhere)
+	UProjectileMovementComponent* ProjectileMovement;
 	
 };

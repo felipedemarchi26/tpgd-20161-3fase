@@ -38,13 +38,29 @@ AChangeColor::AChangeColor()
 	MeshComp->SetWorldScale3D(FVector(0.6f, 0.6f, 0.6f));
 	MeshComp->SetupAttachment(RootComponent);
 
+	ConstructorHelpers::FObjectFinder<UMaterial> MYellow(
+		TEXT("Material'/Game/StarterContent/Materials/M_Metal_Gold.M_Metal_Gold'"));
+	ConstructorHelpers::FObjectFinder<UMaterial> MRed(
+		TEXT("Material'/Game/StarterContent/Materials/M_Wood_Walnut.M_Wood_Walnut'"));
+	if (MYellow.Succeeded()) {
+		MaterialYellow = MYellow.Object;
+	}
+	if (MRed.Succeeded()) {
+		MaterialRed = MRed.Object;
+	}
+
 }
 
 // Called when the game starts or when spawned
 void AChangeColor::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+	Countdown = 30.0f;
+	//Ativar o temporizador para mudança de cor
+	GetWorldTimerManager().SetTimer(Timer, this,
+		&AChangeColor::EveryTime, 1.0f, true);
+
 }
 
 // Called every frame
@@ -72,6 +88,7 @@ void AChangeColor::OnOverlapBegin(UPrimitiveComponent* OverlappedComp,
 			if (Material != nullptr) {
 				MeshComp->SetMaterial(0, Material);
 			}
+			GetWorldTimerManager().ClearTimer(Timer);
 
 		}
 
@@ -102,4 +119,17 @@ void AChangeColor::OnOverlapEnd(UPrimitiveComponent*
 
 	}
 
+}
+
+void AChangeColor::EveryTime() {
+	Countdown--;
+	if (Countdown == 20.0f) {
+		MeshComp->SetMaterial(0, MaterialYellow);
+	} else if (Countdown == 10.0f) {
+		MeshComp->SetMaterial(0, MaterialRed);
+	} else if (Countdown == 0.0f) {
+		UE_LOG(LogTemp, Warning, TEXT("GAME OVER"));
+		//Cancelar o temporizador
+		GetWorldTimerManager().ClearTimer(Timer);
+	}
 }

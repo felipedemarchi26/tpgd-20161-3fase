@@ -28,6 +28,13 @@ private:
 	UPROPERTY(EditAnywhere)
 	UStaticMeshComponent* MeshComp;
 
+	FTimerHandle Timer;
+	UMaterial* MaterialYellow;
+	UMaterial* MaterialRed;
+	int Countdown;
+
+	void EveryTime();
+
 	UFUNCTION()
 	void OnOverlapBegin(UPrimitiveComponent* OverlappedComp, 
 		AActor* OtherActor, UPrimitiveComponent* OtherComp, 

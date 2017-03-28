@@ -27,6 +27,13 @@ AProjectileActor::AProjectileActor()
 	MeshComp->SetWorldScale3D(FVector(0.5f, 0.5f, 0.5f));
 	MeshComp->SetupAttachment(RootComponent);
 
+	ProjectileMovement = CreateDefaultSubobject<UProjectileMovementComponent>
+		(TEXT("ProjectileMovement"));
+	ProjectileMovement->UpdatedComponent = RootComponent;
+	ProjectileMovement->InitialSpeed = 3000.0f;
+	ProjectileMovement->MaxSpeed = 3000.0f;
+	ProjectileMovement->ProjectileGravityScale = 0.0f;
+
 	InitialLifeSpan = 3.0f;
 
 }
